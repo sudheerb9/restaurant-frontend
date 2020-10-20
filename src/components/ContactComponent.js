@@ -1,189 +1,134 @@
-import React, { Component } from 'react';
-import { Breadcrumb, BreadcrumbItem, Button, Label, Col, Row } from 'reactstrap';
+import React from 'react';
+import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Control, LocalForm, Errors } from 'react-redux-form';
-
-const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !(val) || (val.length<=len);
-const minLength = (len) => (val) => !(val) || (val.length>=len);
-const isNumber = (val) => !isNaN(Number(val));
-const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
-
-class Contact extends Component {
-
-    handleSubmit(values) {
-        console.log('Current State is: ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
-        // event.preventDefault();
-    }
-
-
-    render(){
-        
-        return(
-            <div className="container">
-                <div className="row">
-                    <Breadcrumb>
-                        <BreadcrumbItem><Link to='/home'>Home</Link></BreadcrumbItem>
-                        <BreadcrumbItem active>Contact US</BreadcrumbItem>
-                    </Breadcrumb>
-                    <div className="col-12">
-                        <h3>Contact US</h3>  
-                        <hr />
-                    </div>
+import { Loading } from './LoadingComponent';
+import { Stagger, Fade } from 'react-animation-components';
+import { baseUrl } from '../shared/baseUrl'
+function RenderLeader({ leader }) {
+    return (
+        <div className="row mt-3">
+            <Media key={leader.id}>
+                <div className="col-2 m-1">
+                    <Media left>
+                        <Media object src={baseUrl + leader.image} alt={leader.name} />
+                    </Media>
                 </div>
-                <div className="row row-content">
-                    <div className="col-12">
-                    <h3>Location Information</h3>
-                    </div>
-                    <div className="col-12 col-sm-4 offset-sm-1">
-                            <h5>Our Address</h5>
-                            <address>
-                            121, Clear Water Bay Road<br />
-                            Clear Water Bay, Kowloon<br />
-                            HONG KONG<br />
-                            <i className="fa fa-phone"></i>: +852 1234 5678<br />
-                            <i className="fa fa-fax"></i>: +852 8765 4321<br />
-                            <i className="fa fa-envelope"></i>: <a href="mailto:confusion@food.net">confusion@food.net</a>
-                            </address>
-                    </div>
-                    <div className="col-12 col-sm-6 offset-sm-1">
-                        <h5>Map of our Location</h5>
-                    </div>
-                    <div className="col-12 col-sm-11 offset-sm-1">
-                        <div className="btn-group" role="group">
-                            <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-                            <a role="button" className="btn btn-info" href="#"><i className="fa fa-skype"></i> Skype</a>
-                            <a role="button" className="btn btn-success" href="mailto:confusion@food.net"><i className="fa fa-envelope-o"></i> Email</a>
-                        </div>
-                    </div>
+                <div className="col-8">
+                    <Media body>
+                        <Media heading>
+                            {leader.name}
+                        </Media>
+                        <h6>{leader.designation} </h6>
+                        {leader.description}
+                    </Media>
                 </div>
-                <div className="row row-content">
-                   <div className="col-12">
-                      <h3>Send us your Feedback</h3>
-                   </div>
-                    <div className="col-12 col-md-9">
-                        <LocalForm onSubmit={(Values) => this.handleSubmit}>
-                            <Row className="form-group">
-                                <Label htmlFor="firstname" md={2}>First Name</Label>
-                                <Col md={10}>
-                                    <Control.text model=".firstname" id="firstname" name="firstname"
-                                        placeholder="First Name" className="form-control"
-                                        validators={{
-                                            required, minLength: minLength(3), maxLength:maxLength(10)
-                                        }}
-                                        />
-                                        <Errors
-                                        className="text-danger"
-                                        model=".firstname" show="touched"
-                                        messages={{
-                                            required:' Required',
-                                            minLength: ' Must be greater than 2 characters',
-                                            maxLength: ' Must be 15 characters or less'
-                                        }}
-                                        />
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Label htmlFor="lastname" md={2}>Last Name</Label>
-                                <Col md={10}>
-                                    <Control.text model=".lastname" id="lastname" name="lastname"
-                                        placeholder="Last Name" className="form-control"
-                                        validators={{
-                                            required, minLength: minLength(3), maxLength:maxLength(10)
-                                        }}
-                                        />
-                                        <Errors
-                                        className="text-danger"
-                                        model=".lastname" show="touched"
-                                        messages={{
-                                            required:'Required',
-                                            minLength: ' Must be greater than 2 characters',
-                                            maxLength: ' Must be 15 characters or less'
-                                        }}
-                                        />
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Label htmlFor="telnum" md={2}>Contact Tel.</Label>
-                                <Col md={10}>
-                                    <Control.text model=".telnum" id="telnum" name="telnum"
-                                        placeholder="Tel. Number" className="form-control"
-                                        validators={{
-                                            required, minLength: minLength(3), maxLength:maxLength(10), isNumber
-                                        }} />
-                                        <Errors
-                                        className="text-danger"
-                                        model=".telnum" show="touched"
-                                        messages={{
-                                            required:'Required',
-                                            minLength: ' Must be greater than 2 numbers',
-                                            maxLength: ' Must be 15 numbers or less',
-                                            isNumber: ' Must be a number'
-                                        }}
-                                        />
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Label htmlFor="email" md={2}>Email</Label>
-                                <Col md={10}>
-                                    <Control.text model=".email" id="email" name="email"
-                                        placeholder="Email" className="form-control"
-                                        validators={{
-                                            required, validEmail
-                                        }}/>
-                                        <Errors
-                                        className="text-danger"
-                                        model=".email" show="touched"
-                                        messages={{
-                                            required:'Required',
-                                            validEmail: ' Must be valid email'
-                                        }}
-                                        />
+            </Media>
+        </div>
 
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Col md={{size: 6, offset: 2}}>
-                                    <div className="form-check">
-                                        <Label check>
-                                            <Control.checkbox model=".agree"
-                                                name="agree" className="form-check-input"
-                                                 /> {' '}
-                                            <strong>May we contact you?</strong>
-                                        </Label>
-                                    </div>
-                                </Col>
-                                <Col md={{size: 3, offset: 1}}>
-                                    <Control.select model=".contactType" name="contactType"
-                                            className="form-control">
-                                        <option>Tel.</option>
-                                        <option>Email</option>
-                                    </Control.select>
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Label htmlFor="message" md={2}>Your Feedback</Label>
-                                <Col md={10}>
-                                    <Control.textarea model=".message" id="message" name="message"
-                                        rows="12" className="form-control"
-                                        ></Control.textarea>
-                                </Col>
-                            </Row>
-                            <Row className="form-group">
-                                <Col md={{size: 10, offset: 2}}>
-                                    <Button type="submit" color="primary">
-                                        Send Feedback
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </LocalForm>
-                    </div>
-               </div>
-            </div>
-        );
-    }
-    
+    );
 }
 
-export default Contact;
+function About(props) {
+
+    const hasLeaders = () => {
+        if (props.leadersLoading) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+        else if (props.leadersErrMess) {
+            return (
+                <div className="container">
+                    <div className="row">
+                        <h4>{props.leadersErrMess}</h4>
+                    </div>
+                </div>
+
+            );
+        }
+        else {
+            return (
+                <Media list>
+                    <Stagger in>
+                        {leaders}
+                    </Stagger>
+                </Media>
+            );
+        }
+    }
+
+    const leaders = props.leaders.map((leader) => {
+        return (
+            <Fade in>
+                <RenderLeader leader={leader} />
+            </Fade>
+        );
+    });
+
+    return (
+        <div className="container">
+            <div className="row">
+                <Breadcrumb>
+                    <BreadcrumbItem><Link to="/home">Home</Link></BreadcrumbItem>
+                    <BreadcrumbItem active>About Us</BreadcrumbItem>
+                </Breadcrumb>
+                <div className="col-12">
+                    <h3>About Us</h3>
+                    <hr />
+                </div>
+            </div>
+            <div className="row row-content">
+                <div className="col-12 col-md-6">
+                    <h2>Our History</h2>
+                    <p>Started in 2010, Ristorante con Fusion quickly established itself as a culinary icon par excellence in Hong Kong. With its unique brand of world fusion cuisine that can be found nowhere else, it enjoys patronage from the A-list clientele in Hong Kong.  Featuring four of the best three-star Michelin chefs in the world, you never know what will arrive on your plate the next time you visit us.</p>
+                    <p>The restaurant traces its humble beginnings to <em>The Frying Pan</em>, a successful chain started by our CEO, Mr. Peter Pan, that featured for the first time the world's best cuisines in a pan.</p>
+                </div>
+                <div className="col-12 col-md-5">
+                    <Card>
+                        <CardHeader className="bg-primary text-white">Facts At a Glance</CardHeader>
+                        <CardBody>
+                            <dl className="row p-1">
+                                <dt className="col-6">Started</dt>
+                                <dd className="col-6">3 Feb. 2013</dd>
+                                <dt className="col-6">Major Stake Holder</dt>
+                                <dd className="col-6">HK Fine Foods Inc.</dd>
+                                <dt className="col-6">Last Year's Turnover</dt>
+                                <dd className="col-6">$1,250,375</dd>
+                                <dt className="col-6">Employees</dt>
+                                <dd className="col-6">40</dd>
+                            </dl>
+                        </CardBody>
+                    </Card>
+                </div>
+                <div className="col-12">
+                    <Card>
+                        <CardBody className="bg-faded">
+                            <blockquote className="blockquote">
+                                <p className="mb-0">You better cut the pizza in four pieces because
+                                    I'm not hungry enough to eat six.</p>
+                                <footer className="blockquote-footer">Yogi Berra,
+                                <cite title="Source Title">The Wit and Wisdom of Yogi Berra,
+                                    P. Pepe, Diversion Books, 2014</cite>
+                                </footer>
+                            </blockquote>
+                        </CardBody>
+                    </Card>
+                </div>
+            </div>
+            <div className="row row-content">
+                <div className="col-12">
+                    <h2>Corporate Leadership</h2>
+                </div>
+                <div className="col-12">
+                    {hasLeaders()}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default About;   
